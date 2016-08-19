@@ -1,0 +1,52 @@
+#border {
+	background-color: grey;
+	padding: 10px;
+}
+
+nav {
+	background-color: black;
+	text-align: center;
+	padding: 20px;
+}
+
+nav a {
+	color: white;
+	text-decoration: none;
+}
+
+nav a:hover{
+	color: red;
+}
+
+.orange-boxes {
+	background-color: orange;
+	text-align: center;
+	height: 100px;
+}
+
+
+#one{
+	color: purple;
+}
+
+#one p {
+	padding-top: 1.75%;
+}
+
+#two {
+	color: green;
+}
+
+#two p {
+	padding-top: 2.75%;
+}
+
+#three {
+	color: yellow;
+}
+
+#three p {
+	padding-top: 2.75%;
+}
+
+
