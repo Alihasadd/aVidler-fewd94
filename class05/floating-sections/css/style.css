@@ -10,18 +10,19 @@
 
 header {
   background: red;
+  
 }
 
 main {
   background: yellow;
-  // float: ;
-  // width: ;
+  float: left;
+  width: 40%;
 }
 
 aside {
   background: green;
-  // float: ;
-  // width: ;
+  float:right; 
+   width: 40%;
 }
 
 footer {
@@ -29,7 +30,7 @@ footer {
 }
 
 .clear {
-  // clear: ;
+  clear: both; 
 }
 
 

@@ -1,8 +1,44 @@
-/******************************************
-/* SETUP
-/*******************************************/
+#container{
+  background-color: #f0efef
+  margin: 200px;
 
-/* Clear fix hack */
+}
+
+
+header div{
+  color: white;
+  font-family: sans-serif;
+  font-style: bold 800px;
+  background-color: #033048 ;
+  float:left;
+
+#first word{
+  text-transform: uppercase;
+}
+
+}
+header nav {
+  float:right;
+  background-color: #033048 ;
+   font-style: bold 800px;
+}
+
+header nav a {
+    text-decoration: none;
+    color: white;
+}
+
+span {
+    margin: 2000px 0;
+}
+
+header{
+  background-color: #033048 ;
+  overflow: hidden;
+  padding: 15px;
+}
+
+
 .clearfix:after {
   content: ".";
   display: block;
@@ -31,13 +67,14 @@
 /*******************************************/
 
 body {
-  color: #000;
-  font-size: 55px;
+  color: #606161;
+  font-size: 20px;
   line-height: 1.4;
   font-family: 'Open Sans', sans-serif;
 }
 
-
+p.uppercase {
+    text-transform: uppercase;
 /******************************************
 /* LAYOUT
 /*******************************************/
