@@ -3,6 +3,11 @@
   margin: 200px;
 
 }
+main::first-letter{
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 100px;
+}
 
 
 header div{
@@ -11,14 +16,11 @@ header div{
   font-style: bold 800px;
   background-color: #033048 ;
   float:left;
-
-#first word{
-  text-transform: uppercase;
 }
 
 }
 header nav {
-  float:right;
+  float: right;
   background-color: #033048 ;
    font-style: bold 800px;
 }
@@ -26,6 +28,7 @@ header nav {
 header nav a {
     text-decoration: none;
     color: white;
+     float: right;
 }
 
 span {
