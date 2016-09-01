@@ -28,7 +28,7 @@ header nav {
 header nav a {
     text-decoration: none;
     color: white;
-     float: right;
+     display: inline-block;
 }
 
 span {
