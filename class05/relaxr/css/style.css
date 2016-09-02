@@ -23,6 +23,7 @@ header nav {
   float: right;
   background-color: #033048 ;
    font-style: bold 800px;
+   padding: 10px;
 }
 
 header nav a {
