@@ -79,11 +79,7 @@ body {
 
 p.uppercase {
     text-transform: uppercase;
-/******************************************
-/* LAYOUT
-/*******************************************/
 
-/* Center the container */
 #container {
   width: 960px;
   margin: auto;
@@ -96,10 +92,6 @@ header {
 footer {
 
 }
-
-/******************************************
-/* ADDITIONAL STYLES
-/*******************************************/
 
 
 

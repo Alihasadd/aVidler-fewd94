@@ -1,0 +1,73 @@
+header{
+	height: 100px;
+	background-color: #033048 ;
+}
+
+h1 {
+	float: left;
+	color: white;
+	font-size: 24px;
+	font-weight: bold;
+	font-family: sans-serif, arial ;
+	line-height: 100px;
+	padding-left: 5%;
+	width: 40%;
+}
+ nav{
+ 	float: right;
+ 	text-align: right;
+ 	width: 50%;
+ 	padding-right: 5%;
+ }
+
+nav a {
+	color: #f9e42e;
+	font-size: 18px;
+	text-decoration: none;
+	line-height: 100px;
+	padding-right: 2%;
+	font-family: sans-serif;
+}
+
+main {
+	clear: both;
+	padding-top: 30px;
+}
+
+section{
+	width: 70%;
+	float: left;
+	margin-left: 5%;
+}
+
+article img {
+	width: 100%;
+}
+
+article p {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	
+}
+
+h2 {
+	font-size: 28px;
+	padding-bottom: 15px;
+	font-family: sans-serif;
+}
+
+aside{
+	width: 25%;
+	float: right;
+}
+
+#categories	a {
+	display: block;
+	padding: 1%;
+
+}
+
+footer{
+	clear: both;
+}
+
