@@ -1,0 +1,423 @@
+
+
+
+
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Smile its Dr.Monica</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta charset="utf-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+	<meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black"/>
+	<link rel="icon" href="/public/images/adp_logo.png" type="image/x-icon">
+
+	<script>
+		// Tell the revitBootstrap.js that this page is a theme page.
+		var paasTheme = true;
+	</script>
+	<script src="/public/revitBootstrap.js?c=1474035234144" type="text/javascript"></script>
+	<style>
+		.paasInvisible {
+			visibility: hidden;
+		}
+		.esslHidden {
+			display: none;
+		}
+	</style>
+</head>
+<body class="revolution revitLoading">
+	<span class="revitLoadingOverlay">
+		<span class="revitLoadingOverlayIconBox">
+			<i class="fa fa-circle-o-notch fa-spin revitLoadingOverlayIcon"></i>
+		</span><br/>
+		<span class="revitLoadingOverlayMessage">
+            Loading App...
+		</span>
+	</span>
+
+	<div id="appWrapper">
+		  <div data-dojo-type="revit/Masthead" id="masthead">
+			<div data-dojo-type="revit/navigation/GlobalOptions" id="mastheadGlobalOptions"></div>
+			<div data-dojo-type="revit/navigation/IconBar" id="mastheadIconBar"></div>
+			<div data-dojo-type="revit/navigation/NavBar" id="mastheadNavBar"></div>
+			<div data-dojo-type="search/js/SearchForm" data-dojo-props="action: '#', clientType: '1' " id="mastheadSearchForm"></div>
+			<div style="display: none;" id="wfnClientType"></div>
+		</div>
+
+		<div data-dojo-type="revit/AppContainer" id="appContainer" data-dojo-props="landingPageConfig: landingPageConfig, homePageConfig: homePageConfig, featureConfig:featureConfig, angularAware: true"></div>
+		<div data-dojo-type="revit/Footer" id="footer">
+			<ul data-dojo-type="revit/navigation/NavBar" id="footerNav"></ul>
+			<script type="dojo/aspect" data-dojo-method="startup">
+				require(['dojo/topic'], function (topic) {
+                    topic.publish('paasFooter/startup');
+                });
+			</script>
+		</div>
+
+	<script>
+		if (document.domain.indexOf(".adp.com", 0) > 0) {
+			document.domain = "adp.com";
+		}
+
+		// Give cmSetClientId a null value to make if (cmSetClientID) work.
+		var cmSetClientID = null;
+		// Define _container_ to avoid errors testing an undefined variable.
+		var _container_ = null;
+		var revolution = null;
+		var homePageConfig = null;
+		var landingPageConfig = null;
+		var configuration = null;
+		var featureConfig = null;
+		var mainNav = null;
+
+		onRevitLoad(function() {
+			console.log("Theme: Setting up dojo package names and WFN client type.");
+			// Setup the package names for the portal components.
+			require({
+				packages: [
+					{ name: "notification", location: '/static/' + revitLoader.revitVersions.staticVer + '/paas/portlets/notification' },
+					{ name: "search", location: '/static/' + revitLoader.revitVersions.staticVer + '/paas/portlets/search' },
+					{ name: "portal", location: '/static/' + revitLoader.revitVersions.staticVer + '/paas/portlets' }
+				],
+				map: {
+					'*': {
+						'adp/portal': 'portal'
+					}
+				}
+			});
+
+			require([
+				'dojo/dom',
+				'dojo/dom-attr',
+				//script that will update the footer copyright
+				'portal/theme/js/footerCopyright'
+			], function(dom, domAttr, footerCopyright) {
+				var clientIdNode = dom.byId('wfnClientType');
+
+				if (clientIdNode && ('clientType' in revitLoader.revitVersions)) {
+					domAttr.set(clientIdNode, 'clientType', revitLoader.revitVersions.clientType);
+				}
+			});
+		});
+
+		onRevitLoad(function() {
+			console.log("Theme: Loading Coremetrics.");
+			if (revitLoader.revitVersions && revitLoader.revitVersions.coremetrics) {
+				revitLoader.loadScript('//libs.coremetrics.com/eluminate.js', 'text/javascript', function() {
+					// Sometimes Coremetrics doesn't load. Make sure it's there.
+					if (typeof cmSetClientID === "function") {
+						// cmSetClient ID example for Standard 9-series Client IDs
+						cmSetClientID(revitLoader.revitVersions.coremetricsClientId, true, revitLoader.revitVersions.coremetricsDomain, "adp.com");
+						cmCreatePageviewTag("Theme32", "305");
+					}
+
+					// Sometimes Coremetrics doesn't load. Make sure it's there.
+					if (cmSetClientID) {
+						require(["revit/pubSub"], function() {});
+					}
+				}, true);
+			}
+		});
+
+		onRevitLoad(function() {
+			console.log("Theme: Processing theme configuration.");
+
+			homePageConfig = revitLoader.revitVersions.homePageConfig;
+			landingPageConfig = revitLoader.revitVersions.landingPageConfig;
+			configuration = revitLoader.revitVersions.configuration;
+			featureConfig = revitLoader.revitVersions.featureConfig;
+			mainNav = revitLoader.revitVersions.navigation.mainNav;
+
+			require([
+				'dojo/ready',
+				'portal/theme/app/Portal'
+			], function (ready, Portal) {
+				ready(function () {
+					revolution = new Portal({
+						id: "revolution",
+						pageConfig: revitLoader.revitVersions.configuration,
+						navConfig: revitLoader.revitVersions.navigation
+					});
+
+					// Needs to happen after revolution has been assigned its' value and is not null, some theme modules have a dependency on global revolution variable
+					try {
+						require(['portal/theme/ThemeModules'], function (ThemeModules) { ThemeModules.init() });
+					} catch(e) {
+						console.warn('index.jsp error processing ThemeModules');
+					}
+				});
+			});
+
+		});
+
+		onRevitLoad(function() {
+			console.log("Theme: Processing background image.");
+			require(["dojo/dom-style"], function(domStyle) {
+				if (revitLoader.revitVersions.configuration.mastheadOptions.backgroundColor) {
+					var bgColor = revitLoader.revitVersions.configuration.mastheadOptions.backgroundColor;
+					domStyle.set(document.body, { backgroundColor: bgColor });
+				}
+				else {
+					var bgImageUrl = revitLoader.revitVersions.configuration.mastheadOptions.backgroundImage || '/public/images/bg/bg0.jpg';
+
+					if ((bgImageUrl.indexOf('/static/') == -1) && (bgImageUrl.indexOf('/public/') == -1)) {
+						domStyle.set(document.body, { backgroundImage: 'url(/static/@@STATIC_VER_WITH_TAG@@/paas/portlets/theme/bg_images/' + bgImageUrl + '.png)' });
+					}
+					else {
+						domStyle.set(document.body, { backgroundImage: 'url(' + bgImageUrl + ')' });
+					}
+				}
+			});
+		});
+
+		onRevitLoad(function() {
+			console.log("Theme: Loading Tealeaf.");
+			revitLoader.loadScript(require.toUrl('portal/theme/tealeaf/TealeafSDKConfig.js'), 'text/javascript');
+			revitLoader.loadScript(require.toUrl('portal/theme/tealeaf/TealeafSDK.js'), 'text/javascript');
+			revitLoader.loadScript(require.toUrl('portal/theme/tealeaf/RevTealeafBridge.js'), 'text/javascript');
+		});
+
+		onRevitLoad(function() {
+			console.log("Theme: Loading blank.html.");
+			require(['dojo/request/xhr'], function(xhr) {
+				var url = require.toUrl('dojo/resources/blank.html');
+				var xhrOptions = {
+					method: 'GET',
+					handleAs: "text"
+				};
+
+				xhr(url, xhrOptions).then(
+					function(data, ioargs) {
+						console.log("loaded blank html ahead");
+					},
+					function(error) {
+						console.log("error in loading blank html ahead" + error);
+					}
+				);
+			});
+		});
+
+		onRevitLoad(function() {
+			console.log("Theme: Loading PaaS code.");
+			revitLoader.loadScript(require.toUrl('portal/support/js/supportbenefits.js'), 'text/javascript');
+			revitLoader.loadScript(require.toUrl('portal/theme/js/portal.js'), 'text/javascript', function() {
+				if (revitLoader.revitVersions.whatsNew && revitLoader.revitVersions.whatsNew.showOnLogin) {
+					require(["revit/revit"], function(revit) {
+						revit.addOnLoad(showWhatsNewDialog);
+					});
+				}
+			});
+		});
+
+		onRevitLoad(function() {
+            console.log("Theme: Loading bootstrap.");
+            if (revitLoader.revitVersions.bootstrap) {
+					var isEnhanced = false;
+							
+							require(["dojo/sniff","dojox/json/query"], function(has,jsonQuery) {
+						
+									var isEnhancedNgLoad = jsonQuery("..[?rid='" + "enhancedMessageCenter" + "']", revitLoader.revitVersions.navigation.iconBar)[0]; 
+
+									var isWorkflowNgLoad = jsonQuery("..[?rid='" + "pracEnhancedActivityConfiguration" + "']", revitLoader.revitVersions.navigation.mainNav)[0]; 
+									console.log("is new Enhanced Mc"+isEnhancedNgLoad);
+									console.log("is new Enhanced Workflow"+isWorkflowNgLoad);
+                                    if ((!has("ff")) && (isEnhancedNgLoad || isWorkflowNgLoad )) {
+										console.log(" loading ng-revit for non firefox and enhanced mc or workflow enabled users");
+                                            require(["ng-revit"], function() {
+                                                     revitLoader.loadScript(revitLoader.revitVersions.bootstrap + '?instance=' + Date.now(), 'text/javascript');
+                                            });
+                                    }
+                                    else{
+											console.log(" loading ng-revit for firefox and (non enhanced mc or workflow) enabled users");
+                                                     revitLoader.loadScript(revitLoader.revitVersions.bootstrap + '?instance=' + Date.now(), 'text/javascript');
+                                    }
+                            });
+
+			}
+		});
+
+	</script>
+
+	
+
+
+
+
+	<div data-dojo-type="revit/Dialog" id="adp.TimeOutWarning" class="revitNoPadding" data-dojo-props="closable: false" style="width: 600px;">
+		<div data-dojo-type="revit/InlineDialog" data-dojo-props="dialogType: 'warning', size: 'large', closable: false">
+			Session Time Out Warning
+		</div>
+		<div data-dojo-type="revit/layout/ContentPane" style="margin: 20px 20px 0 20px;">
+			In two minutes, your session will time out. Do one of the following:
+			<ul>
+				<li>click <span style="color:#FF0000;font-weight: bold;">Return</span> to reset the time out and extend your session. <span style="color:#FF0000;">You must save your work in progress or you will lose all changes.</span></li>
+				<li>click <span style="color:#FF0000;font-weight: bold;">Leave</span> to log out and  <span style="color:#FF0000;">discard any work in progress.</span></li>
+			</ul>
+			<div class="revitButtonBox" style="margin-top: 20px;">
+				<button id="SessionTimeOutReturn" data-dojo-type="revit/form/Button" type="button" class="right primaryButton" data-dojo-props="onClick: function() { testSession(); dijit.byId('adp.TimeOutWarning').hide(); }">Return</button>
+				<button data-dojo-type="revit/form/Button" type="button" class="right" data-dojo-props="useBusy: false, onClick: function() { portalLogout(); }">Leave</button>
+			</div>
+		</div>
+	</div>
+	
+
+
+
+
+<script>
+	onRevitLoad(function() {
+		console.log("Theme: Creating submitWNRequest() method.");
+		window.submitWNRequest = function() {
+			require(['dojo/request/xhr', 'dijit/registry'], function(xhr, registry) {
+				var state = registry.byId('wnCheckBox').getValue();
+				xhr("/portal/service/whatsnew?state=" + state, {
+			      method: 'GET',
+			      preventCache: true
+				});
+			});
+		}
+	});
+</script>
+
+<div id="whatsnewdialog" title="What's New" data-dojo-type="revit/Dialog" data-dojo-props="autofocus: false, closable: true">
+	<div>
+		<div data-dojo-type="revit/layout/ContentPane" id="wn_frame" data-dojo-props="href: '/myportal/ess/chr/wfncommon/whatsnew.faces'" style="width: 800px; height: 380px; overflow: hidden"></div>
+	</div>
+	<div class="revitFooterContainer" style="margin-top: 30px; height: 35px;" id="whatsnewdialogFooter">
+	
+		<div data-dojo-type="revit.layout.ContentPane" style="position: relative; top: 5px; float: left; white-space: nowrap; overflow: hidden;" id="bottomWNCP" data-dojo-props="href: '/portal/support/feedback/whatsnew/clientUserFeedback.faces?FeedbackLink=Provide+feedback+on+this+What%27s+New&Type=Whats News'"></div>
+	
+		<div id="wnChkBoxContainer" style="margin: 3px; float: right">
+			<div class="revitFormGroupHorizontal">
+				<div class="revitFormGroupItem">
+					<input name="wnCheckBox" id="wnCheckBox" data-dojo-type="revit/form/CheckBox" type="checkbox"  disabled="true" onChange="submitWNRequest" />
+					<span style="width:275px;">Do not show this window until next update</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+	
+
+
+
+<div data-dojo-type="revit/Dialog" id="adp.logoutConfirm" title="Log out" data-dojo-props="closable: true">
+	<div class="font-size-large" style="margin-bottom: 20px;">
+		Are you sure you want to log out?
+	</div>
+	<div class="revitButtonBox">
+		<button name="action" type="button" data-dojo-type="revit/form/Button" value="Leave" class="right primaryButton" data-dojo-props="useBusy: false, onClick: function() { portalLogout(); }">
+			OK
+		</button>
+		<button name="action" type="button" data-dojo-type="revit/form/Button" value="Return" class="right revitSpacer" data-dojo-props="useBusy: false, onClick: function() { dijit.byId('adp.logoutConfirm').hide(); }">
+			Cancel
+		</button>
+	</div>
+</div>
+
+	
+
+
+
+
+<div data-dojo-type="revit/Dialog" id="adp.delegationList" title="Acting On Behalf Of" style="width: 350px" data-dojo-props="closable: false, dialogType: 'warning'">
+	<form data-dojo-type="revit/form/Form" id="adp.delegationForm" action="/portal/support/delegationmodeservlet" method="post">
+		<div class="font-size-large" id="delegationdiv"></div>
+		<div class="revitButtonBox" style="margin-top: 20px;">
+			
+			<button data-dojo-type="revit/form/Button" class="right primaryButton" data-dojo-props="onClick: function() { verifyActiveDelegation(); return false; }" type="button" value="OK">
+			OK</button>
+			
+			<button name="action" type="button" data-dojo-type="revit/form/Button" value="Return" class="right revitSpacer" data-dojo-props="useBusy: false, onClick: function() { dijit.byId('adp.delegationList').hide(); }">
+			Cancel
+		</button>
+		</div>
+	</form>
+</div>
+<div data-dojo-type="revit/Dialog" id="adp.delegationErrorDialog" title="Error" data-dojo-props="closable: true">
+	<form data-dojo-type="revit.form.Form" id="adp.delegationErrorDlgForm">
+	</form>
+</div>
+<script>
+	onRevitLoad(function() {
+		console.log("Theme: Creating delegation functions.");
+		require(['dojo/request/xhr', 'dijit/registry'], function(xhr, registry) {
+			function showBusyCursor(){
+				document.body.style.cursor = 'wait';
+			}
+
+			window.verifyActiveDelegation = function() {
+				console.debug(" Calling to check if the delegation is active.");
+				showBusyCursor();
+				var verifyDelegation = {
+					preventCache: true,
+					handleAs: "json",
+					// headers: {"Content-Type": "application/json"},
+					data: { selectedUserId: revolution.delegationId }
+				};
+				xhr.post("/portal/support/delegationmodeservlet", verifyDelegation).then(
+					function(data, ioargs) {
+						if (data && data.isActive && data.isActive == "true") {
+							revolution.reloadTheme(data.redirectURL);
+						}
+						else {
+							console.log("error in validating the active delegation");
+							document.body.style.cursor = 'default';
+							registry.byId("adp.delegationForm").clearMessages();
+							registry.byId("adp.delegationForm").addErrorMessage("This delegation has expired or has been cancelled and can no longer be accessed.");
+						}
+					},
+					function(error) {
+						console.error("error in calling delegation servlet");
+						document.body.style.cursor = 'default';
+					}
+				);
+			};
+
+			window.verifySingleActiveDelegation = function(delegationUserId) {
+				console.debug(" Calling to check if the delegation is active.");
+				showBusyCursor();
+				var verifyDelegation = {
+					preventCache: true,
+					handleAs:"json",
+					// headers: {"Content-Type": "application/json"},
+					data: { selectedUserId: delegationUserId }
+				};
+				xhr.post("/portal/support/delegationmodeservlet", verifyDelegation).then(
+					function(data, ioargs) {
+						if (data && data.isActive && data.isActive == "true") {
+							revolution.reloadTheme(data.redirectURL);
+						}
+						else {
+							console.log("error in validating the active delegation");
+							document.body.style.cursor = 'default';
+							registry.byId("adp.delegationErrorDlgForm").clearMessages();
+							registry.byId("adp.delegationErrorDlgForm").addErrorMessage("This delegation has expired or has been cancelled and can no longer be accessed.");
+							registry.byId("adp.delegationErrorDialog").show();
+						}
+					},
+					function(error) {
+						console.error("error in calling delegation servlet");
+						document.body.style.cursor = 'default';
+					}
+				);
+			};
+		});
+	});
+</script>
+
+	
+
+
+
+
+
+
+
+	</div>
+</body>
+</html>
