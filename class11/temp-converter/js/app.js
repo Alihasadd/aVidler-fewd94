@@ -1,15 +1,22 @@
 
-
-parseFloat()
-
-$('#submit').click(function(){
-
-	parseInt($('#C').val())
-	alert(parseInt($('#C').val()));
+$(document).ready(function(){
+	var rawTemp;
+	var convTemp;
+	var rawUnit;
+	var convUnit;
 
 
-	parseInt($('#F').val())
-	alert(parseInt($('#F').val()));
 
-
+	$('#submit').click(function(){
+		rawTemp = $('#input').val();
+		rawUnit = $('select').val();
+		if(rawUnit === 'f'){
+			convTemp = (rawTemp - 32)/1.8;
+			convUnit = 'C';
+		}else{
+			convTemp = (rawTemp * 1.8) + 32;
+			convUnit = 'F';
+		}
+		$('#output').html(convTemp + " " + + &deg; + convUnit);
+	});
 });
